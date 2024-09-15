@@ -7,16 +7,12 @@ app.use(express.json());
 
 
 //ROTAS
-app.post('/myfavcontent/register',(req,res) => {
-    const creatingUser = createUser(req.body);
-    res.json({msg:`${creatingUser}`});
-    
-});
+app.post('/myfavcontent/register', createUser);
 
 
 //Funçao para criar usuario
-async function createUser(request){
-    const {name,email,password,confirmpassword} = request;
+async function createUser(req,res){
+    const {name,email,password,confirmpassword} = req.body;
 
     if(!email) {
         return res.status(422).json({msg: 'O email é obrigatório!'})
@@ -34,22 +30,24 @@ async function createUser(request){
     }
 
     try {
-        const usuario = {
-            email,
-            name,
-            password
-        };
-        const sql = "INSERT INTO usuarios set ?;"
+        const usuario = [email,name,password];
 
-        await connection.query(sql,usuario, (err,result) => {
-            if(err){
-                return err;
-            } else {
-                return result;
-            }
-        })
+        const sql = "INSERT INTO usuarios (`email`, `name`, `password`) VALUES (?, ?, ?);"
+
+        const [result,fields] = await connection.execute(sql,usuario);
+        console.log(result);
+        console.log(fields)
+        return res.status(201).json({msg: "Usuario registrado"});
+
+        // await connection.query(sql,usuario, (err,result) => {
+        //     if(err){
+        //         return res.status(400).json({msg: `Houve um erro. Segue erro: ${err}.`});
+        //     } else {
+        //         return res.status(201).json(result);
+        //     }
+        // })
     } catch(err){
-        console.log(err)
+        return res.status(400).json({msg: `Houve um erro. Segue erro: ${err}.`});
     }
 }
 
