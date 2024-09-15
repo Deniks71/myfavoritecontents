@@ -18,3 +18,5 @@ console.log('Conexão estabelecida com sucesso.');
 
 const [result] = await connection.execute('SELECT 1');
 console.log('Teste de conexão:', result);
+
+export default connection;
