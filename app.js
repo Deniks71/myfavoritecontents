@@ -1,16 +1,17 @@
 import express from 'express';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken'
 import connection from './database/conexao.js';
 
 const app = express();
-
 app.use(express.json());
 
 
-//ROTAS
+//Routes
 app.post('/myfavcontent/register', createUser);
 
 
-//Funçao para criar usuario
+//Func to creat user
 async function createUser(req,res){
     const {name,email,password,confirmpassword} = req.body;
 
@@ -29,8 +30,13 @@ async function createUser(req,res){
         return res.status(422).json({msg: 'As Senhas nao conferem!'})
     }
 
+    //Creating passwordHash
+    const salt = await bcrypt.genSalt(12);
+    const passwordHash = await bcrypt.hash(password,salt);
+
     try {
-        const usuario = [email,name,password];
+        const usuario = [email,name,passwordHash];
+        //Check if User Exist by searching for their email in the database.
 
         const sql = "INSERT INTO usuarios (`email`, `name`, `password`) VALUES (?, ?, ?);"
 
@@ -39,13 +45,6 @@ async function createUser(req,res){
         console.log(fields)
         return res.status(201).json({msg: "Usuario registrado"});
 
-        // await connection.query(sql,usuario, (err,result) => {
-        //     if(err){
-        //         return res.status(400).json({msg: `Houve um erro. Segue erro: ${err}.`});
-        //     } else {
-        //         return res.status(201).json(result);
-        //     }
-        // })
     } catch(err){
         return res.status(400).json({msg: `Houve um erro. Segue erro: ${err}.`});
     }
