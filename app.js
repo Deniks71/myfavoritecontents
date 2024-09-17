@@ -27,14 +27,23 @@ async function createUser(req,res){
         return res.status(422).json({msg: 'A senha é obrigatória!'})
     }
     if(password !== confirmpassword) {
-        return res.status(422).json({msg: 'As Senhas nao conferem!'})
+        return res.status(422).json({msg: 'As Senhas nao conferem!'})   
     }
 
-    //Creating passwordHash
-    const salt = await bcrypt.genSalt(12);
-    const passwordHash = await bcrypt.hash(password,salt);
-
     try {
+        //Checking in the database if the email assigned already exits
+        const checkEmailSql = "SELECT email FROM usuarios WHERE email = ?"
+
+        //If the email already exists, the system has to reject this action.
+        const [emailExists] = await connection.execute(checkEmailSql,[email])
+        //mysql returns an object inside of an array, thats why i put the index 0, to show only the value that i want.
+        if(emailExists[0]){
+            return res.status(422).json({msg:"Email ja cadastrado, por favor insira outro Email."})
+        }
+
+        //Creating passwordHash
+        const salt = await bcrypt.genSalt(12);
+        const passwordHash = await bcrypt.hash(password,salt);
         const usuario = [email,name,passwordHash];
         //Check if User Exist by searching for their email in the database.
 
