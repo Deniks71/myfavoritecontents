@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser, loginUser } from './controllers/UserController.js';
+import { createUser, loginUser,checkToken, getDataFromUser } from './controllers/UserController.js';
 
 
 const app = express();
@@ -12,6 +12,9 @@ app.post('/myfavcontent/register', createUser);
 
 //Login
 app.post('/myfavcontent/login', loginUser);
+
+//Private Route
+app.get('/myfavcontent/user/:id', checkToken, getDataFromUser);
 
 
 
