@@ -10,6 +10,7 @@ export async function checkToken(req,res,next){
     try {
         const secret = process.env.SECRET;
         jwt.verify(token, secret);
+        
 
         next();
 
