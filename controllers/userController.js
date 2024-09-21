@@ -86,7 +86,7 @@ export async function loginUser(req,res){
             process.env.SECRET, 
         );
 
-        res.status(200).header('Authorization', `Bearer ${token}`).json({msg: 'Login realizado com sucesso.', id: emailExists[0].idusuarios, token: token});
+        res.status(200).header('Authorization', `Bearer ${token}`).json({msg: 'Login realizado com sucesso.', id: emailExists[0].idusuarios, email: emailExists[0].email, token: token});
     }catch(err){
         return res.status(400).json({msg: `Houve um erro. Segue erro: ${err}.`});
     }
@@ -95,7 +95,8 @@ export async function loginUser(req,res){
 
 export async function getDataFromUser(req,res){
     const id = req.params.id
-    console.log(id)
+
+    //check if ID exists in the database
 
     res.status(200).json({msg: 'Tudo OK'})
 }
