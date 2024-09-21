@@ -1,5 +1,7 @@
 import express from 'express';
-import { createUser, loginUser,checkToken, getDataFromUser } from './controllers/UserController.js';
+import { createUser, loginUser, getDataFromUser } from './controllers/UserController.js';
+import { checkToken } from './controllers/authController.js';
+
 
 
 const app = express();
