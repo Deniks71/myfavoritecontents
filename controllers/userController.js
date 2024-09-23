@@ -93,21 +93,4 @@ export async function loginUser(req,res){
 
 };
 
-export async function getDataFromUser(req,res){
-    const id = req.params.id;
-
-    try{
-        //check if ID exists in the database
-        const checkIdSql = "SELECT idusuarios FROM usuarios WHERE idusuarios = ?";
-        const [idExists] = await connection.execute(checkIdSql,[id]);
-        
-        if(!idExists[0].idusuarios){
-            return res.status(422).json({msg:"Usuario nao encontrado."})
-        }
-
-
-    } catch(err) {
-        return res.status(400).json({msg: `Houve um erro. Segue erro: ${err}.`});
-    };
-};
 

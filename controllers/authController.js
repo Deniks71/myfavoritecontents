@@ -11,7 +11,6 @@ export async function checkToken(req,res,next){
         const secret = process.env.SECRET;
         jwt.verify(token, secret);
         
-
         next();
 
     } catch(err) {

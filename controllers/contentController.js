@@ -1,5 +1,6 @@
 import connection from "../database/conexao.js";
 
+//Create a content to add in the database
 export async function insertContent(req,res) {
     //Take the User ID
     const id = req.params.id;
@@ -28,4 +29,25 @@ export async function insertContent(req,res) {
     } catch(err){
         return res.status(400).json({msg: `Houve um erro. Segue erro: ${err}.`})
     }
-} 
+};
+
+export async function showContents(req,res){
+    //Take the User ID
+    const userId = req.params.id
+
+    try{
+        //Query to search in the database everything in the contents table from a user
+        const showContentsSql = "SELECT * FROM contents WHERE iduser = ?"
+        const [contentsFromDb] = await connection.execute(showContentsSql,[userId]);
+
+        if(!contentsFromDb[0]){
+            return res.status(422).json({msg:"Conteudos não cadastrados."})
+        };
+
+        //Returns the result of the query.
+        return res.status(200).json({conteudos: contentsFromDb});
+
+    } catch(err){
+        return res.status(400).json({msg: `Houve um erro. Segue erro: ${err}.`})
+    }
+};
