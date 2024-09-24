@@ -37,7 +37,7 @@ export async function showContents(req,res){
 
     try{
         //Query to search in the database everything in the contents table from a user
-        const showContentsSql = "SELECT * FROM contents WHERE iduser = ?"
+        const showContentsSql = "SELECT * FROM contents WHERE iduser = ?;"
         const [contentsFromDb] = await connection.execute(showContentsSql,[userId]);
 
         if(!contentsFromDb[0]){
@@ -51,3 +51,21 @@ export async function showContents(req,res){
         return res.status(400).json({msg: `Houve um erro. Segue erro: ${err}.`})
     }
 };
+
+export async function deleteContent(req,res) {
+    const id = req.params.id;
+    const contentId = req.params.contentId;
+
+    const queryDelete = "DELETE FROM contents WHERE idcontent=? AND iduser=?;"
+
+    try{
+        const [deletedContent] = await connection.execute(queryDelete, [contentId,id]);
+
+        console.log(deletedContent);
+
+        return res.status(200).json({msg: "Content Deletado"})
+
+    } catch(err){
+        return res.status(400).json({msg: `Houve um erro. Segue erro: ${err}.`})
+    }
+}
