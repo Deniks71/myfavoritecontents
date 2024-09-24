@@ -69,3 +69,34 @@ export async function deleteContent(req,res) {
         return res.status(400).json({msg: `Houve um erro. Segue erro: ${err}.`})
     }
 }
+
+export async function updateContent(req,res) {
+    const id = req.params.id;
+    const contentId = req.params.contentId;
+
+    //Takes the data that the user wants to update in their list.
+    const {title,description} = req.body;
+
+    if(!title){
+        return res.status(422).json({msg: 'O Titulo é obrigatório!'});
+    };
+
+    if(!description){
+        return res.status(422).json({msg: 'A descrição é obrigatória!'})
+    }
+    
+    const queryUpdate = "UPDATE contents SET title=?, description=? WHERE idcontent=? AND iduser=?;"
+
+    try{
+        const [updatedContent] = await connection.execute(queryUpdate,[title,description,contentId,id])
+
+        console.log(updatedContent);
+
+        return res.status(200).json({msg: "Content atualizado"})
+
+
+    } catch(err){
+        return res.status(400).json({msg: `Houve um erro. Segue erro: ${err}.`})
+    }
+
+}

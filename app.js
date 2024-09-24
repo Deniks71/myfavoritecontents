@@ -1,7 +1,7 @@
 import express from 'express';
 import { createUser, loginUser } from './controllers/UserController.js';
 import { checkToken } from './controllers/authController.js';
-import { deleteContent, insertContent, showContents } from './controllers/contentController.js';
+import { deleteContent, insertContent, showContents, updateContent } from './controllers/contentController.js';
 
 const app = express();
 app.use(express.json());
@@ -20,8 +20,9 @@ app.get('/myfavcontent/user/:id', checkToken, showContents);
 //Insert content
 app.post('/myfavcontent/user/:id/insertContent', checkToken, insertContent);
 
-app.delete('/myfavcontent/user/:id/delete/:contentId', deleteContent)
+app.delete('/myfavcontent/user/:id/delete/:contentId', checkToken, deleteContent)
 
+app.put('/myfavcontent/user/:id/update/:contentId', checkToken,updateContent);
 
 
 
