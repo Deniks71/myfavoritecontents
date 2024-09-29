@@ -1,9 +1,11 @@
 import express from 'express';
+import cors from 'cors';
 import { createUser, loginUser } from './controllers/UserController.js';
 import { checkToken } from './controllers/authController.js';
 import { deleteContent, insertContent, showContents, updateContent } from './controllers/contentController.js';
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 
