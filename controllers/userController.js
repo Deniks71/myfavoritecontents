@@ -43,7 +43,7 @@ export async function createUser(req,res){
         const [result,fields] = await connection.execute(sql,usuario);
         console.log(result);
         console.log(fields)
-        return res.status(201).json({msg: "Usuario registrado"});
+        return res.status(201).json({msg: "Usuario Cadastrado com sucesso!!"});
 
     } catch(err){
         return res.status(400).json({msg: `Houve um erro. Segue erro: ${err}.`});
