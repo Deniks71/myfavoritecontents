@@ -33,7 +33,8 @@ export async function insertContent(req,res) {
 
 export async function showContents(req,res){
     //Take the User ID
-    const userId = req.params.id
+    const userId = req.params.id;
+
 
     try{
         //Query to search in the database everything in the contents table from a user
